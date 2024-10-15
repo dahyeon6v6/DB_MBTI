@@ -1,0 +1,120 @@
+﻿-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+-- mbti_t Table Create SQL
+-- 테이블 생성 SQL - mbti_t
+CREATE TABLE mbti_t
+(
+    mbti_num    VARCHAR(10)     NOT NULL, 
+    mbti        VARCHAR(10)     NOT NULL, 
+    m_char      VARCHAR(500)    NOT NULL, 
+     PRIMARY KEY (mbti_num)
+);
+
+-- 테이블 Comment 설정 SQL - mbti_t
+COMMENT ON TABLE mbti_t IS 'mbti';
+
+-- 컬럼 Comment 설정 SQL - mbti_t.mbti_num
+COMMENT ON COLUMN mbti_t.mbti_num IS 'mbti식별번호';
+
+-- 컬럼 Comment 설정 SQL - mbti_t.mbti
+COMMENT ON COLUMN mbti_t.mbti IS 'mbti명';
+
+-- 컬럼 Comment 설정 SQL - mbti_t.m_char
+COMMENT ON COLUMN mbti_t.m_char IS '성격 특징';
+
+
+-- jobs_t Table Create SQL
+-- 테이블 생성 SQL - jobs_t
+CREATE TABLE jobs_t
+(
+    jobs_num    VARCHAR(10)     NOT NULL, 
+    jobs        VARCHAR(50)     NOT NULL, 
+    j_char      VARCHAR(500)    NOT NULL, 
+    mbti_num    VARCHAR(10)     NOT NULL, 
+     PRIMARY KEY (jobs_num)
+);
+
+-- 테이블 Comment 설정 SQL - jobs_t
+COMMENT ON TABLE jobs_t IS '직업';
+
+-- 컬럼 Comment 설정 SQL - jobs_t.jobs_num
+COMMENT ON COLUMN jobs_t.jobs_num IS '직업식별번호';
+
+-- 컬럼 Comment 설정 SQL - jobs_t.jobs
+COMMENT ON COLUMN jobs_t.jobs IS '직업명';
+
+-- 컬럼 Comment 설정 SQL - jobs_t.j_char
+COMMENT ON COLUMN jobs_t.j_char IS '직업 특징';
+
+-- 컬럼 Comment 설정 SQL - jobs_t.mbti_num
+COMMENT ON COLUMN jobs_t.mbti_num IS 'mbti식별번호';
+
+-- Foreign Key 설정 SQL - jobs_t(mbti_num) -> mbti_t(mbti_num)
+ALTER TABLE jobs_t
+    ADD CONSTRAINT FK_jobs_t_mbti_num_mbti_t_mbti_num FOREIGN KEY (mbti_num)
+        REFERENCES mbti_t (mbti_num) ;
+
+-- Foreign Key 삭제 SQL - jobs_t(mbti_num)
+-- ALTER TABLE jobs_t
+-- DROP CONSTRAINT FK_jobs_t_mbti_num_mbti_t_mbti_num;
+
+
+-- majors_t Table Create SQL
+-- 테이블 생성 SQL - majors_t
+CREATE TABLE majors_t
+(
+    major_num    VARCHAR(10)     NOT NULL, 
+    major        VARCHAR(50)     NOT NULL, 
+    m_char       VARCHAR(500)    NOT NULL, 
+     PRIMARY KEY (major_num)
+);
+
+-- 테이블 Comment 설정 SQL - majors_t
+COMMENT ON TABLE majors_t IS '학과';
+
+-- 컬럼 Comment 설정 SQL - majors_t.major_num
+COMMENT ON COLUMN majors_t.major_num IS '학과식별번호';
+
+-- 컬럼 Comment 설정 SQL - majors_t.major
+COMMENT ON COLUMN majors_t.major IS '학과명';
+
+-- 컬럼 Comment 설정 SQL - majors_t.m_char
+COMMENT ON COLUMN majors_t.m_char IS '학과 설명';
+
+
+-- jobs_majors_t Table Create SQL
+-- 테이블 생성 SQL - jobs_majors_t
+CREATE TABLE jobs_majors_t
+(
+    jobs_num     VARCHAR(10)    NOT NULL, 
+    major_num    VARCHAR(10)    NOT NULL
+);
+
+-- 테이블 Comment 설정 SQL - jobs_majors_t
+COMMENT ON TABLE jobs_majors_t IS '직업과 학과 관계';
+
+-- 컬럼 Comment 설정 SQL - jobs_majors_t.jobs_num
+COMMENT ON COLUMN jobs_majors_t.jobs_num IS '직업식별번호';
+
+-- 컬럼 Comment 설정 SQL - jobs_majors_t.major_num
+COMMENT ON COLUMN jobs_majors_t.major_num IS '학과식별번호';
+
+-- Foreign Key 설정 SQL - jobs_majors_t(major_num) -> majors_t(major_num)
+ALTER TABLE jobs_majors_t
+    ADD CONSTRAINT FK_jobs_majors_t_major_num_majors_t_major_num FOREIGN KEY (major_num)
+        REFERENCES majors_t (major_num) ;
+
+-- Foreign Key 삭제 SQL - jobs_majors_t(major_num)
+-- ALTER TABLE jobs_majors_t
+-- DROP CONSTRAINT FK_jobs_majors_t_major_num_majors_t_major_num;
+
+-- Foreign Key 설정 SQL - jobs_majors_t(jobs_num) -> jobs_t(jobs_num)
+ALTER TABLE jobs_majors_t
+    ADD CONSTRAINT FK_jobs_majors_t_jobs_num_jobs_t_jobs_num FOREIGN KEY (jobs_num)
+        REFERENCES jobs_t (jobs_num) ;
+
+-- Foreign Key 삭제 SQL - jobs_majors_t(jobs_num)
+-- ALTER TABLE jobs_majors_t
+-- DROP CONSTRAINT FK_jobs_majors_t_jobs_num_jobs_t_jobs_num;
+
+
